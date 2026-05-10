@@ -1,0 +1,1 @@
+Ładnie poprosiłem AI o podzielenie się informacją jakie adnotacje stosuje spring w porównaniu do poprzednio przerabianego soapa.
