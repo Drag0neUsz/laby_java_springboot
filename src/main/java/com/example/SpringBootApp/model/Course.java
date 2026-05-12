@@ -3,20 +3,16 @@ package com.example.SpringBootApp.model;
 import jakarta.persistence.*;
 
 @Entity
-public class Kurs {
+public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    private int ects;
+    private Integer ects;
 
-    public Kurs() {}
+    public Course() {}
 
-    public Kurs(Integer id, String name, int ects) {
-        this.id = id;
-        this.name = name;
-        this.ects = ects;
-    }
+
 
     public Integer getId() {
         return id;
@@ -30,10 +26,10 @@ public class Kurs {
     public void setName(String name) {
         this.name = name;
     }
-    public int getEcts() {
+    public Integer getEcts() {
         return ects;
     }
-    public void setEcts(int ects) {
+    public void setEcts(Integer ects) {
         this.ects = ects;
     }
 }

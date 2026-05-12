@@ -14,7 +14,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
     @ExceptionHandler(InvalidNameException.class)
-    public ResponseEntity<String> handleAge(InvalidNameException ex) {
+    public ResponseEntity<String> handleName(InvalidNameException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
 }

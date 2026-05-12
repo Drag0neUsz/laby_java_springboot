@@ -11,4 +11,6 @@ public interface StudentService {
     Student updateStudent(Integer id, Student student) throws StudentNotFoundException;
     boolean deleteStudent(Integer id) throws StudentNotFoundException;
     int countStudents();
+    //biznesówki
+    Double getAverage(Integer studentId);
 }

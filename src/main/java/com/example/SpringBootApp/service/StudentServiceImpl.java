@@ -1,7 +1,9 @@
 package com.example.SpringBootApp.service;
 
 import com.example.SpringBootApp.exception.*;
+import com.example.SpringBootApp.model.Grade;
 import com.example.SpringBootApp.model.Student;
+import com.example.SpringBootApp.repository.GradeRepository;
 import com.example.SpringBootApp.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
@@ -10,20 +12,22 @@ import java.util.List;
 @Service
 public class StudentServiceImpl implements StudentService {
 
-    private final StudentRepository repository;
+    private final StudentRepository studentRepository;
+    private final GradeRepository gradeRepository;
 
-    public StudentServiceImpl(StudentRepository repository) {
-        this.repository = repository;
+    public StudentServiceImpl(StudentRepository studentRepository, GradeRepository gradeRepository) {
+        this.studentRepository = studentRepository;
+        this.gradeRepository = gradeRepository;
     }
 
     @Override
     public List<Student> getAllStudents() {
-        return repository.findAll();
+        return studentRepository.findAll();
     }
 
     @Override
     public Student getStudent(Integer id) throws StudentNotFoundException {
-        return repository.findById(id)
+        return studentRepository.findById(id)
                 .orElseThrow(StudentNotFoundException::new);
     }
 
@@ -31,32 +35,53 @@ public class StudentServiceImpl implements StudentService {
     public Student addStudent(Student student) throws InvalidAgeException, InvalidNameException {
         if (student.getAge() <= 0 || student.getAge() > 123) throw new InvalidAgeException();
         if (student.getFirstName() == null || student.getFirstName().isEmpty()) throw new InvalidNameException();
-        return repository.save(student);
+        return studentRepository.save(student);
     }
 
     @Override
     public boolean deleteStudent(Integer id) throws StudentNotFoundException {
-        if (!repository.existsById(id)) {
+        if (!studentRepository.existsById(id)) {
             throw new StudentNotFoundException();
         }
-        repository.deleteById(id);
+        studentRepository.deleteById(id);
         return true;
     }
 
     @Override
     public Student updateStudent(Integer id, Student studentDetails) throws StudentNotFoundException {
-        Student student = repository.findById(id)
+        Student student = studentRepository.findById(id)
                 .orElseThrow(StudentNotFoundException::new);
         student.setFirstName(studentDetails.getFirstName());
         student.setAge(studentDetails.getAge());
         student.setCity(studentDetails.getCity());
-        return repository.save(student);
+        return studentRepository.save(student);
     }
 
     @Override
     public int countStudents() {
-        // count() to kolejny gotowiec z repozytorium
-        return (int) repository.count();
+        return (int) studentRepository.count();
+    }
+
+    //biznesówki
+    @Override
+    public Double getAverage(Integer id) throws StudentNotFoundException {
+        List<Grade> grades = gradeRepository.findByStudentId(id);
+
+        if (grades.isEmpty()) return 0.0;
+
+        double sumProd = 0;
+        int sumEcts = 0;
+
+        for (Grade g : grades) {
+            if (g.getCourse().getEcts() != null) {
+                sumProd += g.getGrade() * g.getCourse().getEcts();
+                sumEcts += g.getCourse().getEcts();
+            }
+        }
+
+        if (sumEcts == 0) return 0.0;
+
+        return sumProd / sumEcts;
     }
 
 }

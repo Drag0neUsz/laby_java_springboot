@@ -4,7 +4,7 @@ import com.example.SpringBootApp.exception.InvalidAgeException;
 import com.example.SpringBootApp.exception.InvalidNameException;
 import com.example.SpringBootApp.model.Student;
 import com.example.SpringBootApp.service.StudentService;
-import com.example.SpringBootApp.exception.StudentNotFoundException; // Zmienione z Person
+import com.example.SpringBootApp.exception.StudentNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,5 +47,11 @@ public class StudentController {
     @PutMapping("/{id}")
     public Student update(@PathVariable int id, @RequestBody Student student) throws StudentNotFoundException {
         return service.updateStudent(id, student);
+    }
+
+    //biznesówki
+    @GetMapping("/{id}/gpa")
+    public Double getAverage(@PathVariable Integer id) {
+        return service.getAverage(id);
     }
 }

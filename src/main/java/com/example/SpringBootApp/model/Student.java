@@ -2,6 +2,8 @@ package com.example.SpringBootApp.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Student {
     @Id
@@ -11,14 +13,13 @@ public class Student {
     private String firstName;
     private int age;
     private String city;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Grade> grades;
+
     public Student() {
     }
-    public Student(Integer id, String firstName, int age, String city) {
-        this.id = id;
-        this.firstName = firstName;
-        this.age = age;
-        this.city = city;
-    }
+
     public Integer getId() {
         return id;
     }
