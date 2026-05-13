@@ -1,6 +1,6 @@
 package com.example.SpringBootApp.exception;
-public class CourseInvalidEctsException extends RuntimeException {
-    public CourseInvalidEctsException() {
-        super("Invalid ECTS value");
+public class CourseHasGradesException extends RuntimeException {
+    public CourseHasGradesException() {
+        super("Course has existing grades");
     }
 }

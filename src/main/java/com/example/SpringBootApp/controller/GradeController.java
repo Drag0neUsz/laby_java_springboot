@@ -1,7 +1,8 @@
 package com.example.SpringBootApp.controller;
 
+import com.example.SpringBootApp.exception.GradeNotFoundException;
 import com.example.SpringBootApp.model.Grade;
-import com.example.SpringBootApp.repository.GradeRepository;
+import com.example.SpringBootApp.service.GradeService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,24 +11,34 @@ import java.util.List;
 @RequestMapping("/grades")
 public class GradeController {
 
-    private final GradeRepository gradeRepository;
+    private final GradeService gradeService;
 
-    public GradeController(GradeRepository gradeRepository) {
-        this.gradeRepository = gradeRepository;
+    public GradeController(GradeService gradeService) {
+        this.gradeService = gradeService;
     }
 
     @GetMapping
     public List<Grade> getAll() {
-        return gradeRepository.findAll();
+        return gradeService.getAllGrades();
+    }
+
+    @GetMapping("/{id}")
+    public Grade get(@PathVariable Integer id) throws GradeNotFoundException {
+        return gradeService.getGrade(id);
     }
 
     @PostMapping
     public Grade add(@RequestBody Grade grade) {
-        return gradeRepository.save(grade);
+        return gradeService.addGrade(grade);
+    }
+
+    @PutMapping("/{id}")
+    public Grade update(@PathVariable Integer id, @RequestBody Grade grade) throws GradeNotFoundException {
+        return gradeService.updateGrade(id, grade);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
-        gradeRepository.deleteById(id);
+    public boolean delete(@PathVariable Integer id) {
+        return gradeService.deleteGrade(id);
     }
 }

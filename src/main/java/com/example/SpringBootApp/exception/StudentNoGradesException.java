@@ -1,6 +1,6 @@
 package com.example.SpringBootApp.exception;
-public class StudentNotFoundException extends RuntimeException {
-    public StudentNotFoundException() {
-        super("The specified person does not exist");
+public class StudentNoGradesException extends RuntimeException {
+    public StudentNoGradesException() {
+        super("The specified person has no grades");
     }
 }

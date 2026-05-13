@@ -1,6 +1,6 @@
 package com.example.SpringBootApp.exception;
-public class InvalidAgeException extends RuntimeException {
-    public InvalidAgeException() {
+public class StudentInvalidAgeException extends RuntimeException {
+    public StudentInvalidAgeException() {
         super("Invalid Age");
     }
 }

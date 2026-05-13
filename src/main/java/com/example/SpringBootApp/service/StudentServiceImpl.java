@@ -32,8 +32,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student addStudent(Student student) throws InvalidAgeException, InvalidNameException {
-        if (student.getAge() <= 0 || student.getAge() > 123) throw new InvalidAgeException();
+    public Student addStudent(Student student) throws StudentInvalidAgeException, InvalidNameException {
+        if (student.getAge() <= 0 || student.getAge() > 123) throw new StudentInvalidAgeException();
         if (student.getFirstName() == null || student.getFirstName().isEmpty()) throw new InvalidNameException();
         return studentRepository.save(student);
     }
@@ -57,14 +57,20 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.save(student);
     }
 
+
+
+    //biznesówki
     @Override
     public int countStudents() {
         return (int) studentRepository.count();
     }
 
-    //biznesówki
     @Override
     public Double getAverage(Integer id) throws StudentNotFoundException {
+        if (!studentRepository.existsById(id)) {
+            throw new StudentNotFoundException();
+        }
+
         List<Grade> grades = gradeRepository.findByStudentId(id);
 
         if (grades.isEmpty()) return 0.0;
@@ -82,6 +88,37 @@ public class StudentServiceImpl implements StudentService {
         if (sumEcts == 0) return 0.0;
 
         return sumProd / sumEcts;
+    }
+
+    @Override
+    public List<Grade> getStudentGrades(Integer id) throws StudentNotFoundException, StudentNoGradesException {
+        if (!studentRepository.existsById(id)) {
+            throw new StudentNotFoundException();
+        }
+        List<Grade> grades = gradeRepository.findByStudentId(id);
+        if (grades.isEmpty()) throw new StudentNoGradesException();
+        return gradeRepository.findByStudentId(id);
+    }
+
+    @Override
+    public List<Student> getTopStudents() throws StudentNotFoundException {
+        List<Student> allStudents = studentRepository.findAll();
+
+        List<Student> topStudents = allStudents.stream()
+                .filter(s -> {
+                    try {
+                        Double avg = getAverage(s.getId());
+                        return avg >= 4.75;
+                    } catch (Exception e) {
+                        return false;
+                    }
+                })
+                .toList();
+
+        if (topStudents.isEmpty()) {
+            throw new StudentNotFoundException();
+        }
+        return topStudents;
     }
 
 }

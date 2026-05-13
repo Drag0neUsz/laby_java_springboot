@@ -1,7 +1,9 @@
 package com.example.SpringBootApp.controller;
 
-import com.example.SpringBootApp.exception.InvalidAgeException;
+import com.example.SpringBootApp.exception.StudentInvalidAgeException;
 import com.example.SpringBootApp.exception.InvalidNameException;
+import com.example.SpringBootApp.exception.StudentNoGradesException;
+import com.example.SpringBootApp.model.Grade;
 import com.example.SpringBootApp.model.Student;
 import com.example.SpringBootApp.service.StudentService;
 import com.example.SpringBootApp.exception.StudentNotFoundException;
@@ -30,7 +32,7 @@ public class StudentController {
     }
 
     @PostMapping
-    public Student add(@RequestBody Student student) throws InvalidAgeException, InvalidNameException {
+    public Student add(@RequestBody Student student) throws StudentInvalidAgeException, InvalidNameException {
         return service.addStudent(student);
     }
 
@@ -53,5 +55,15 @@ public class StudentController {
     @GetMapping("/{id}/gpa")
     public Double getAverage(@PathVariable Integer id) {
         return service.getAverage(id);
+    }
+
+    @GetMapping("/{id}/grades")
+    public List<Grade> getGrades(@PathVariable Integer id) throws StudentNotFoundException, StudentNoGradesException {
+        return service.getStudentGrades(id);
+    }
+
+    @GetMapping("/top")
+    public List<Student> getTop() throws StudentNotFoundException {
+        return service.getTopStudents();
     }
 }
